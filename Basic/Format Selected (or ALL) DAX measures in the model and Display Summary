@@ -1,0 +1,32 @@
+
+
+// Title: Format Selected (or ALL) DAX measures in the model and Display Summary
+//  
+// Author: Cristian Angyal, twitter.com/cristian_angyal
+// 
+// This script, when executed, will loop through all selected measures (or all measures in the model if the _sMeasures = Model.AllMeasures) 
+// and format DAX Expressions offering the possibility to choose Short or Long-line DAX formatting (default is long-line format)
+// 
+// When finished formatting an Info message appears on screen with a summary of what was executed: the total number of Measures formated and their names listed
+// ====================================================================================================================================
+
+
+//Selection of WHAT needs to be formatted: Switch <<Selected.Measures>> to << Model.AllMeasures>> to format ALL DAX measures in the Model
+var _sMeasures = Selected.Measures;     
+
+//Initialize a string to collect measure names
+string _smNames = "";
+
+//Loop throudh each selected measure to format DAX and collect Measurenames 
+foreach(var m in _sMeasures) 
+{
+  m.Expression = "\n" + FormatDax(m.Expression, shortFormat: false);    // Switch shortFormat <<false>> to <<true>> for shorformat DAX 
+  _smNames = _smNames + "\n     " + m.Name;
+}
+
+//Display in an info box summary for what was executed: number of formatted measures and their names
+Info
+    (   
+        "DAX was formatted for "    + Convert.ToString(_sMeasures.Count()) + " measures! \n\n" +
+        "Measures affected: "       + Convert.ToString(_smNames)    
+    );
